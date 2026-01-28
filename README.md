@@ -1,4 +1,4 @@
-# cleanup-cdr
+# cdr-cleanup
 cleaner cdr files
 📄 Disk Cleanup Utility for RHEL 9 - Installation & User Manual
 📋 DAFTAR ISI

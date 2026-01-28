@@ -13,7 +13,7 @@ MAX_LOG_SIZE=10485760        # 10MB
 MIN_FILE_COUNT=30            # Minimal file disisakan per directory
 MAX_DELETE_PER_RUN=100       # Max file dihapus per eksekusi
 BACKUP_ENABLED=0
-BACKUP_DIR="/backup/deleted_files"
+BACKUP_DIR="/home/backup/deleted_files"
 
 DRY_RUN=1
 DEBUG_MODE=0

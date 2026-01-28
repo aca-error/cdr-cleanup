@@ -1,6 +1,6 @@
 # cdr-cleanup
 cleaner cdr files
-📄 Disk Cleanup Utility for RHEL 9 - Installation & User Manual
+📄 CDR Cleanup Utility for RHEL 9 - Installation & User Manual
 📋 DAFTAR ISI
 Overview
 
@@ -23,7 +23,7 @@ Security Considerations
 Monitoring & Logging
 
 1. OVERVIEW
-Disk Cleanup Utility adalah script Bash yang dikembangkan khusus untuk RHEL 9 yang membantu mengelola penggunaan disk dengan aman. Script ini memiliki dua mode operasi utama:
+CDR Cleanup Utility adalah script Bash yang dikembangkan khusus untuk RHEL 9 yang membantu mengelola penggunaan disk dengan aman. Script ini memiliki dua mode operasi utama:
 
 🔧 Fitur Utama:
 Dual Mode Operation: Disk Threshold & Age-Based Cleanup
@@ -76,20 +76,20 @@ done
 📥 Step 1: Download Script
 bash
 # Download script ke /usr/local/bin
-sudo curl -o /usr/local/bin/disk-cleanup https://raw.githubusercontent.com/priyogunawan-aca/cleanup-cdr/main/cleanup-cdr.sh
+sudo curl -o /usr/local/bin/disk-cleanup https://raw.githubusercontent.com/aca-error/cdr-cleanup/main/cdr-cleanup.sh
 
 # Atau copy dari local
-sudo cp cleanup.sh /usr/local/bin/disk-cleanup
+sudo cp cdr-cleanup.sh /usr/local/bin/cdr-cleanup
 🔒 Step 2: Set Permissions
 bash
 # Set executable permission
-sudo chmod +x /usr/local/bin/disk-cleanup
+sudo chmod +x /usr/local/bin/cdr-cleanup
 
 # Set ownership
-sudo chown root:root /usr/local/bin/disk-cleanup
+sudo chown root:root /usr/local/bin/cdr-cleanup
 
 # Verify installation
-ls -la /usr/local/bin/disk-cleanup
+ls -la /usr/local/bin/cdr-cleanup
 📁 Step 3: Create Log Directory
 bash
 # Buat directory untuk log (default: /home/cdrsbx)
@@ -97,14 +97,14 @@ sudo mkdir -p /home/cdrsbx
 sudo chmod 755 /home/cdrsbx
 
 # Atau buat directory custom
-sudo mkdir -p /var/log/disk-cleanup
+sudo mkdir -p /var/log/cdr-cleanup
 ✅ Step 4: Verify Installation
 bash
 # Test help command
-disk-cleanup --help
+cdr-cleanup --help
 
 # Test dry-run
-disk-cleanup --dry-run --threshold=90
+cdr-cleanup --dry-run --threshold=90
 4. CONFIGURATION
 ⚙️ Default Configuration:
 bash
@@ -115,7 +115,7 @@ MAX_DELETE_PER_RUN=100        # Max files deleted per run
 BACKUP_ENABLED=0              # Backup disabled by default
 DRY_RUN=1                     # Safety first - dry run default
 📝 Environment File (Optional):
-Buat file /etc/default/disk-cleanup:
+Buat file /etc/cdr-cleanup.conf:
 
 bash
 # Disk Cleanup Configuration
@@ -124,45 +124,45 @@ CLEANUP_THRESHOLD=85
 CLEANUP_MIN_FILES=20
 CLEANUP_MAX_DELETE=500
 CLEANUP_BACKUP_ENABLED=1
-CLEANUP_BACKUP_DIR="/backup/deleted_files"
+CLEANUP_BACKUP_DIR="/home/backup/deleted_files"
 🛡️ SELinux Configuration:
 bash
 # Buat SELinux policy jika diperlukan
-sudo semanage fcontext -a -t bin_t "/usr/local/bin/disk-cleanup"
-sudo restorecon -v /usr/local/bin/disk-cleanup
+sudo semanage fcontext -a -t bin_t "/usr/local/bin/cdr-cleanup"
+sudo restorecon -v /usr/local/bin/cdr-cleanup
 5. USAGE EXAMPLES
 🔍 Basic Usage:
 bash
 # 1. Help menu
-disk-cleanup --help
+cdr-cleanup --help
 
 # 2. Dry run - check what will be deleted
-disk-cleanup --dry-run --threshold=85
+cdr-cleanup --dry-run --threshold=85
 
 # 3. Force cleanup with threshold 80%
-disk-cleanup --force --threshold=80
+cdr-cleanup --force --threshold=80
 
 # 4. Age-based cleanup (older than 180 days)
-disk-cleanup --force --age-days=180
+cdr-cleanup --force --age-days=180
 
 # 5. Age-based cleanup (older than 6 months)
-disk-cleanup --force --age-months=6
+cdr-cleanup --force --age-months=6
 🎯 Advanced Usage:
 bash
 # 1. Custom directory dengan backup
-disk-cleanup --force --threshold=75 --directory=/var/log --backup
+cdr-cleanup --force --threshold=75 --directory=/home/cdrsbx --backup
 
 # 2. Debug mode untuk troubleshooting
-disk-cleanup --force --threshold=85 --debug
+cdr-cleanup --force --threshold=85 --debug
 
 # 3. Exclude pattern tambahan
-disk-cleanup --force --threshold=80 --exclude="*.log" --exclude="backup/*"
+cdr-cleanup --force --threshold=80 --exclude="*.log" --exclude="backup/*"
 
 # 4. Quiet mode untuk cron jobs
-disk-cleanup --force --threshold=85 --quiet
+cdr-cleanup --force --threshold=85 --quiet
 
 # 5. Include hidden files (HATI-HATI!)
-disk-cleanup --force --threshold=85 --include-hidden
+cdr-cleanup --force --threshold=85 --include-hidden
 📊 Mode Comparison:
 Mode	Command	Use Case
 Threshold	--threshold=85	Prevent disk full
@@ -177,18 +177,18 @@ sudo crontab -e
 📅 Cron Examples:
 bash
 # 1. Run daily at 2 AM dengan threshold 85%
-0 2 * * * /usr/local/bin/disk-cleanup --force --threshold=85 --quiet
+0 2 * * * /usr/local/bin/cdr-cleanup --force --threshold=85 --quiet
 
 # 2. Run weekly (Sunday) untuk age-based cleanup
-0 3 * * 0 /usr/local/bin/disk-cleanup --force --age-days=180 --quiet
+0 3 * * 0 /usr/local/bin/cdr-cleanup --force --age-days=180 --quiet
 
 # 3. Run every 6 hours dengan monitoring
-0 */6 * * * /usr/local/bin/disk-cleanup --force --threshold=90 --quiet
+0 */6 * * * /usr/local/bin/cdr-cleanup --force --threshold=90 --quiet
 
 # 4. With email notification on error
-0 2 * * * /usr/local/bin/disk-cleanup --force --threshold=85 2>&1 | mail -s "Disk Cleanup Report" admin@example.com
+0 2 * * * /usr/local/bin/cdr-cleanup --force --threshold=85 2>&1 | mail -s "CDR Cleanup Report" admin@example.com
 📁 Cron Configuration File:
-Buat file /etc/cron.d/disk-cleanup:
+Buat file /etc/cron.d/cdr-cleanup:
 
 bash
 # Disk Cleanup Cron Job
@@ -197,43 +197,43 @@ PATH=/sbin:/bin:/usr/sbin:/usr/bin
 MAILTO=root
 
 # Run daily at 2 AM
-0 2 * * * root /usr/local/bin/disk-cleanup --force --threshold=85 --quiet
+0 2 * * * root /usr/local/bin/cdr-cleanup --force --threshold=85 --quiet
 7. SYSTEMD SERVICE SETUP
 🔄 Create Service File:
-Buat file /etc/systemd/system/disk-cleanup.service:
+Buat file /etc/systemd/system/cdr-cleanup.service:
 
 ini
 [Unit]
-Description=Disk Cleanup Service
+Description=CDR Cleanup Service
 After=network-online.target
 Wants=network-online.target
-Documentation=man:disk-cleanup(1)
+Documentation=man:cdr-cleanup(1)
 
 [Service]
 Type=oneshot
 User=root
 Group=root
-EnvironmentFile=/etc/default/disk-cleanup
-ExecStart=/usr/local/bin/disk-cleanup --force --threshold=${CLEANUP_THRESHOLD:-85} --min-files=${CLEANUP_MIN_FILES:-20} --max-delete=${CLEANUP_MAX_DELETE:-500}
+EnvironmentFile=/etc/default/cdr-cleanup
+ExecStart=/usr/local/bin/cdr-cleanup --force --threshold=${CLEANUP_THRESHOLD:-85} --min-files=${CLEANUP_MIN_FILES:-20} --max-delete=${CLEANUP_MAX_DELETE:-500}
 StandardOutput=journal
 StandardError=journal
 LockPersonality=yes
 NoNewPrivileges=yes
 PrivateTmp=yes
 ProtectSystem=strict
-ReadWritePaths=/home/cdrsbx /backup
+ReadWritePaths=/home/cdrsbx /home/backup
 MemoryDenyWriteExecute=yes
 RestrictRealtime=yes
 
 [Install]
 WantedBy=multi-user.target
 ⏰ Create Timer File:
-Buat file /etc/systemd/system/disk-cleanup.timer:
+Buat file /etc/systemd/system/cdr-cleanup.timer:
 
 ini
 [Unit]
-Description=Run Disk Cleanup Daily
-Requires=disk-cleanup.service
+Description=Run CDR Cleanup Daily
+Requires=cdr-cleanup.service
 
 [Timer]
 OnCalendar=daily
@@ -248,16 +248,16 @@ bash
 sudo systemctl daemon-reload
 
 # Enable timer
-sudo systemctl enable --now disk-cleanup.timer
+sudo systemctl enable --now cdr-cleanup.timer
 
 # Check status
-sudo systemctl status disk-cleanup.timer
+sudo systemctl status cdr-cleanup.timer
 
 # Manual run
-sudo systemctl start disk-cleanup.service
+sudo systemctl start cdr-cleanup.service
 
 # View logs
-sudo journalctl -u disk-cleanup.service -f
+sudo journalctl -u cdr-cleanup.service -f
 8. TROUBLESHOOTING
 🔍 Common Issues & Solutions:
 Issue 1: "Script tidak menghapus file padahal disk sudah penuh"
@@ -267,21 +267,21 @@ bash
 df -h /home/cdrsbx
 
 # 2. Run dengan debug mode
-disk-cleanup --force --threshold=20 --debug --directory=/home/cdr
+cdr-cleanup --force --threshold=20 --debug --directory=/home/cdrsbx
 
 # 3. Cek apakah directory valid
-ls -la /home/cdr
+ls -la /home/cdrsbx
 Issue 2: "Permission denied"
 bash
 # Solusi:
 # 1. Cek permission script
-ls -la /usr/local/bin/disk-cleanup
+ls -la /usr/local/bin/cdr-cleanup
 
 # 2. Cek permission directory target
 ls -la /home/cdrsbx
 
 # 3. Run sebagai root
-sudo disk-cleanup --force --threshold=85
+sudo cdr-cleanup --force --threshold=85
 Issue 3: "SELinux blocking operations"
 bash
 # Solusi:
@@ -292,35 +292,35 @@ sudo ausearch -m avc -ts recent
 sudo setenforce 0
 
 # 3. Create proper policy
-sudo audit2allow -a -M diskcleanup
-sudo semodule -i diskcleanup.pp
+sudo audit2allow -a -M cdr-cleanup
+sudo semodule -i cdr-cleanup.pp
 Issue 4: "Script stuck atau terlalu lama"
 bash
 # Solusi:
 # 1. Cek lock file
-ls -la /var/lock/cdrsbx_cleanup.lock
+ls -la /var/lock/cdr-cleanup.lock
 
 # 2. Kill stale process
-sudo rm -f /var/lock/cdrsbx_cleanup.lock
+sudo rm -f /var/lock/cdr-cleanup.lock
 
 # 3. Reduce max delete limit
-disk-cleanup --force --threshold=85 --max-delete=50
+cdr-cleanup --force --threshold=85 --max-delete=50
 📋 Diagnostic Commands:
 bash
 # 1. Check script version
-disk-cleanup --help | head -5
+cdr-cleanup --help | head -5
 
 # 2. Test disk usage function
 get_disk_usage() {
     df -P "$1" 2>/dev/null | awk 'NR==2 {gsub(/%/, "", $5); print $5}'
 }
-echo "Disk usage: $(get_disk_usage /home/cdr)%"
+echo "Disk usage: $(get_disk_usage /home/cdrsbx)%"
 
 # 3. Check log file
-tail -f /home/cdrsbx/cleanup.log
+tail -f /var/log/cdr-cleanup/cdr-cleanup.log
 
 # 4. Verify exclude patterns
-find /home/cdr -type f -name '.*' | wc -l
+find /home/cdrsbx -type f -name '.*' | wc -l
 9. SECURITY CONSIDERATIONS
 🔐 Default Security Features:
 Exclude Hidden Files: Semua file/directory yang dimulai dengan . dikecualikan
@@ -345,16 +345,16 @@ Review log file secara berkala
 🔒 Security Best Practices:
 bash
 # 1. Regular log review
-grep -i "error\|warning" /home/cdrsbx/cleanup.log
+grep -i "error\|warning" /var/log/cdr-cleanup/cdr-cleanup.log
 
 # 2. Monitor disk cleanup activity
-sudo auditctl -w /usr/local/bin/disk-cleanup -p x
+sudo auditctl -w /usr/local/bin/cdr-cleanup -p x
 
 # 3. Regular backup verification
-ls -la /backup/deleted_files/
+ls -la /home/backup/deleted_files/
 
 # 4. Update script secara berkala
-sudo curl -o /usr/local/bin/disk-cleanup https://new-version-url
+sudo curl -o /usr/local/bin/cdr-cleanup https://new-version-url
 10. MONITORING & LOGGING
 📊 Log File Structure:
 text
@@ -367,25 +367,25 @@ text
 👁️ Monitoring Examples:
 bash
 # 1. Last run summary
-grep -A10 "DISK CLEANUP COMPLETED" /home/cdrsbx/cleanup.log | tail -15
+grep -A10 "DISK CLEANUP COMPLETED" /var/log/cdr-cleanup/cdr-cleanup.log | tail -15
 
 # 2. Check duration
-grep "Total Duration" /home/cdrsbx/cleanup.log
+grep "Total Duration" /var/log/cdr-cleanup/cdr-cleanup.log
 
 # 3. Count deleted files
-grep -c "Deleted:" /home/cdrsbx/cleanup.log
+grep -c "Deleted:" /var/log/cdr-cleanup/cdr-cleanup.log
 
 # 4. Error statistics
-grep -c "ERROR" /home/cdrsbx/cleanup.log
+grep -c "ERROR" /var/log/cdr-cleanup/cdr-cleanup.log
 
 # 5. Generate daily report
-awk '/DISK CLEANUP STARTED/,/DISK CLEANUP COMPLETED/' /home/cdrsbx/cleanup.log | tail -20
+awk '/DISK CLEANUP STARTED/,/DISK CLEANUP COMPLETED/' /var/log/cdr-cleanup/cdr-cleanup.log | tail -20
 📈 Integration with Monitoring Tools:
 Nagios/Icinga Plugin:
 bash
 #!/bin/bash
-# check_disk_cleanup.sh
-LOG="/home/cdrsbx/cleanup.log"
+# check_cdr_cleanup.sh
+LOG="/var/log/cdr-cleanup/cdr-cleanup.log"
 LAST_RUN=$(grep "DISK CLEANUP COMPLETED" "$LOG" | tail -1)
 
 if [[ -z "$LAST_RUN" ]]; then
@@ -401,7 +401,7 @@ if [[ $LAST_RUN =~ ([0-9-]+ [0-9:]+) ]]; then
     HOURS_DIFF=$(( (NOW_EPOCH - LAST_EPOCH) / 3600 ))
     
     if [[ $HOURS_DIFF -gt 24 ]]; then
-        echo "WARNING: Disk cleanup last run $HOURS_DIFF hours ago"
+        echo "WARNING: CDR cleanup last run $HOURS_DIFF hours ago"
         exit 1
     else
         echo "OK: Disk cleanup running normally"
@@ -409,10 +409,10 @@ if [[ $LAST_RUN =~ ([0-9-]+ [0-9:]+) ]]; then
     fi
 fi
 Log Rotation Configuration:
-Buat file /etc/logrotate.d/disk-cleanup:
+Buat file /etc/logrotate.d/cdr-cleanup:
 
 bash
-/home/cdrsbx/cleanup.log {
+/var/log/cdr-cleanup/cdr-cleanup.log {
     daily
     rotate 30
     compress
@@ -426,20 +426,20 @@ bash
 }
 📞 SUPPORT & CONTACT
 Resources:
-Documentation: /usr/share/doc/disk-cleanup/
+Documentation: /usr/share/doc/cdr-cleanup/
 
-Man Page: man disk-cleanup (jika diinstall)
+Man Page: man cdr-cleanup (jika diinstall)
 
-GitHub Repository: https://github.com/priyogunawan-aca/cleanup-cdr
+GitHub Repository: https://github.com/aca-error/cdr-cleanup
 
-Issue Tracker: https://github.com/priyogunawan-aca/cleanup-cdr/issues
+Issue Tracker: https://github.com/aca-error/cdr-cleanup/issues
 
 Emergency Procedures:
-Stop All Cleanup: sudo pkill -f disk-cleanup
+Stop All Cleanup: sudo pkill -f cdr-cleanup
 
-Restore Backup: cp -r /backup/deleted_files/ /original/path/
+Restore Backup: cp -r /home/backup/deleted_files/ /original/path/
 
-Disable Service: sudo systemctl disable disk-cleanup.timer
+Disable Service: sudo systemctl disable cdr-cleanup.timer
 
 📄 APPENDIX
 A. Exit Codes:
@@ -452,11 +452,11 @@ Code	Meaning	Action
 5	Already running	Check lock file
 B. File Locations:
 Path	Purpose	Permission
-/usr/local/bin/disk-cleanup	Main script	755 root:root
-/home/cdrsbx/cleanup.log	Log file	644 root:root
-/var/lock/cdrsbx_cleanup.lock	Lock file	644 root:root
-/backup/deleted_files/	Backup directory	700 root:root
-/etc/default/disk-cleanup	Configuration	600 root:root
+/usr/local/bin/cdr-cleanup	Main script	755 root:root
+/var/log/cdr-cleanup/cdr-cleanup.log	Log file	644 root:root
+/var/lock/cdr-cleanup.lock	Lock file	644 root:root
+/home/backup/deleted_files/	Backup directory	700 root:root
+/etc/cdr-cleanup.conf	Configuration	600 root:root
 C. Performance Tips:
 Large Directories: Gunakan --max-delete=500 untuk batch processing
 

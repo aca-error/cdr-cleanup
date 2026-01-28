@@ -6,8 +6,8 @@ set -o nounset -o pipefail -o errexit
 # =======================
 DIRECTORY="/home/cdrsbx"
 THRESHOLD=90
-LOGFILE="/home/cdrsbx/cleanup.log"
-LOCKFILE="/var/lock/cdrsbx_cleanup.lock"
+LOGFILE="/var/log/cdr-cleanup/cdr-cleanup.log"
+LOCKFILE="/var/lock/cdr-cleanup.lock"
 
 MAX_LOG_SIZE=10485760        # 10MB
 MIN_FILE_COUNT=30            # Minimal file disisakan per directory

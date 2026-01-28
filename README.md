@@ -413,8 +413,9 @@ Buat file /etc/logrotate.d/cdr-cleanup:
 
 bash
 /var/log/cdr-cleanup/cdr-cleanup.log {
-    daily
-    rotate 30
+    monthly
+    size 50M
+    rotate 12
     compress
     delaycompress
     missingok
@@ -424,6 +425,7 @@ bash
         /usr/bin/systemctl reload rsyslog >/dev/null 2>&1 || true
     endscript
 }
+
 📞 SUPPORT & CONTACT
 Resources:
 Documentation: /usr/share/doc/cdr-cleanup/
